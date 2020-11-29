@@ -23,6 +23,17 @@ await ShortUrl.create({ full: req.body.fullUrl })
 res.redirect('/')
 })
 
+app.get('/:shortUrl',async (req,res)=>{
+    const shortUrl=await ShortUrl.findOne({short:req.params.shortUrl})
+    if (shortUrl==null) return res.sendStatus(404)
+
+    shortUrl.clicks++
+    shortUrl.save()
+
+    res.redirect(shortUrl.full)
+
+})
+
 app.listen(PORT,()=>{
 console.log('started on http://localhost:'+ PORT);
 });
